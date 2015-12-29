@@ -1,0 +1,5 @@
+/Users/yngve/Projects/sig/sig/obj/x86/Debug/.NETFramework,Version=v4.5.AssemblyAttribute.cs
+/Users/yngve/Projects/sig/sig/bin/Debug/sig.exe.mdb
+/Users/yngve/Projects/sig/sig/bin/Debug/sig.exe
+/Users/yngve/Projects/sig/sig/obj/x86/Debug/sig.exe
+/Users/yngve/Projects/sig/sig/obj/x86/Debug/sig.exe.mdb

@@ -1,0 +1,5 @@
+C:\Users\Yngve Finnestad\Documents\Visual Studio 2015\Projects\sig\sig\obj\x86\Debug\sig.exe
+C:\Users\Yngve Finnestad\Documents\Visual Studio 2015\Projects\sig\sig\bin\Debug\sig.exe
+C:\Users\Yngve Finnestad\Documents\Visual Studio 2015\Projects\sig\sig\bin\Debug\sig.pdb
+C:\Users\Yngve Finnestad\Documents\Visual Studio 2015\Projects\sig\sig\obj\x86\Debug\sig.csprojResolveAssemblyReference.cache
+C:\Users\Yngve Finnestad\Documents\Visual Studio 2015\Projects\sig\sig\obj\x86\Debug\sig.pdb
