@@ -75,10 +75,10 @@ namespace sig
         }
 
 
-        public List<DateTime> findBreakPoints(double first,double second)
+        public List<DateTime> findBreakPoints(double first,double second, int samplesBefore)
         {
             analyzer a = new analyzer();
-            var breaks = a.FindDebugBreakPoints(samples, first, second);
+            var breaks = a.FindDebugBreakPoints(samples, first, second, samplesBefore);
             return breaks;
         }
 
