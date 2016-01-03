@@ -12,11 +12,13 @@ namespace sig
 
         //public static string csvPath = @"/Users/yngve/Projects/Python/15bar_400cc.csv";
         //public string csvPath = @"C:\Users\Yngve Finnestad\Documents\highpri_cornertest\15bar_400cc.csv";
-        public static string csvPathFolder = @"/Volumes/DOS/!TRANSFER/FeedTubeGrind copy/heavygrind/for_graph";
+        //public static string csvPathFolder = @"/Volumes/DOS/!TRANSFER/FeedTubeGrind copy/heavygrind/for_graph";
+        public static string csvPathFolder = @"/Volumes/DOS/!TRANSFER/FeedTubeGrind copy/finegrind/3sec initial";
+        //public static string csvPathFolder = @"/Volumes/DOS/!TRANSFER/FeedTubeGrind copy/finegrind/segmented";
         public static string triggerSignal = "A1Atom.SetPoint";
         public static double first_trigger = 20;
         public static double second_triger = 0;
-        public static int samples_before = 50;
+        public static int samples_before = -5;
         public static bool ignoreStart = true;
 
 		public static void Main (string[] args)
@@ -71,7 +73,7 @@ namespace sig
             foreach (var signal in signals)
             {
                 analyzer a = new analyzer();
-                trimmedSignals.Add(a.trimEndTime(signal, new TimeSpan(0, 0, 5)));
+                trimmedSignals.Add(a.trimEndTime(signal, new TimeSpan(0, 0, 3)));
             }
 
             // write signal CSV file for each signal with overlapping cycles
