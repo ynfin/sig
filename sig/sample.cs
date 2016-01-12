@@ -16,7 +16,7 @@ namespace sig
 		public sample (string rawtime, string rawdata)
 		{
 			rawTimeStamp = rawtime;
-            value = Convert.ToDouble(rawdata);
+            value = Convert.ToDouble(rawdata, System.Globalization.CultureInfo.InvariantCulture);
 
             time = DateTime.ParseExact(rawtime, "dd:MM:yyyy HH:mm:ss:fff", System.Globalization.CultureInfo.InvariantCulture);
 		}

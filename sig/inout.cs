@@ -23,6 +23,70 @@ namespace sig
             return signalList;
         }
 
+
+        public void writeAnalyzedSignalsToCSV(List<analyzerSample> linspaceSamples, string dataFileOutputPath, bool writeSampleData)
+        {
+            StringBuilder fullSignalString = new StringBuilder();
+            string filename = Path.GetFileNameWithoutExtension(dataFileOutputPath);
+            
+            // <header>
+            fullSignalString.Append("sec,mean,var,sd,sigma1_upper,sigma1_lower,sigma2_upper,sigma2_lower,sigma3_upper,sigma3_lower");
+
+            if (writeSampleData)
+            {
+                int cyclenumber = 0;
+                foreach (var number in linspaceSamples[0].numberList)
+                {
+                    cyclenumber++;
+                    fullSignalString.Append("," + filename + "cycle-" + cyclenumber);
+                }
+            }
+
+            fullSignalString.AppendLine("");
+            //</header>
+
+            foreach (var sample in linspaceSamples)
+            {
+                // first column
+                string num = sample.timePoint.TotalSeconds.ToString();
+                fullSignalString.Append(num.ToString().Replace(',', '.'));
+
+                // stats columns
+                fullSignalString.Append(
+                    "," + sample.average.ToString().Replace(',', '.') +
+                    "," + sample.sumOfSquaresOfDifferences.ToString().Replace(',', '.') +
+                    "," + sample.standardDeviation.ToString().Replace(',', '.') +
+                    "," + (sample.average + sample.standardDeviation * 1).ToString().Replace(',', '.') +
+                    "," + (sample.average - sample.standardDeviation * 1).ToString().Replace(',', '.') +
+                    "," + (sample.average + sample.standardDeviation * 2).ToString().Replace(',', '.') +
+                    "," + (sample.average - sample.standardDeviation * 2).ToString().Replace(',', '.') +
+                    "," + (sample.average + sample.standardDeviation * 3).ToString().Replace(',', '.') +
+                    "," + (sample.average - sample.standardDeviation * 3).ToString().Replace(',', '.')
+                    );
+
+                if (writeSampleData)
+                {
+                    // data columns
+                    foreach (var number in sample.numberList)
+                    {
+                        fullSignalString.Append("," + number.ToString().Replace(',', '.'));
+                    }
+                }
+              
+                // end
+                fullSignalString.AppendLine("");
+            }
+
+            string signame = linspaceSamples[0].signalName;
+            var dir = Directory.CreateDirectory(dataFileOutputPath.Remove(dataFileOutputPath.Length - 4));
+            string fullSignalPath = dir.FullName + "/" + filename + "[stats_" + signame + "].csv";
+            // Write the string to a file.
+            System.IO.StreamWriter singlefile = new System.IO.StreamWriter(fullSignalPath);
+            singlefile.WriteLine(fullSignalString);
+            singlefile.Close();
+        }
+
+
         public void readCSV(string filepath)
         {
             var reader = new StreamReader(File.OpenRead(filepath));
@@ -121,8 +185,11 @@ namespace sig
                         // signal analyzer format, but starts at time 0 (used for cycles)
                         break;
                     
-                    case csvType.Excel: 
-                        fullSignalString.AppendLine(signal.samples[i].delta.TotalSeconds + "," + signal.samples[i].value);
+                    case csvType.Excel:
+                        string deltasec = signal.samples[i].delta.TotalSeconds.ToString().Replace(',','.');
+                        string value = signal.samples[i].value.ToString().Replace(',', '.');
+                        fullSignalString.AppendLine(deltasec + "," + value);
+                        //fullSignalString.AppendLine(signal.samples[i].delta.TotalSeconds + "," + signal.samples[i].value);
                         break;
 
                     default:
@@ -171,7 +238,11 @@ namespace sig
                             break;
 
                         case csvType.Excel:
-                            cycleSignalString.AppendLine(cycle.samples[i].cycleDelta.TotalSeconds + "," + cycle.samples[i].value);
+                            string deltasec = cycle.samples[i].cycleDelta.TotalSeconds.ToString().Replace(',', '.');
+                            string value = cycle.samples[i].value.ToString().Replace(',', '.');
+                            cycleSignalString.AppendLine(deltasec + "," + value);
+
+                            //cycleSignalString.AppendLine(cycle.samples[i].cycleDelta.TotalSeconds + "," + cycle.samples[i].value);
                             break;
 
                         default:

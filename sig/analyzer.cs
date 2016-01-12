@@ -9,6 +9,61 @@ namespace sig
         {
         }
 
+        public List<analyzerSample> getVarianceArray(signal signal)
+        {
+            // go through each cycle and sample points with desired intervalls
+            // store the samples in an array in a list at i = sample #
+
+            List<analyzerSample> linspaceList = new List<analyzerSample>();
+            TimeSpan maxtime = new TimeSpan();
+            TimeSpan activeTime = new TimeSpan(0,0,0,0,0);
+            int interval = 100;
+
+
+            // determine the maximum time needed
+            foreach (var cycle in signal.cycleList)
+            {
+                TimeSpan newtime = cycle.samples[cycle.samples.Count - 1].cycleDelta;
+                if (maxtime.CompareTo(newtime) < 0)
+                {
+                    maxtime = newtime;
+                }
+            }
+
+            // build empty linspace list
+            while (activeTime.CompareTo(maxtime) < 0)
+            {
+                linspaceList.Add(new analyzerSample(activeTime));
+                activeTime = activeTime.Add(new TimeSpan(0, 0, 0, 0, interval));
+            }
+
+            activeTime = new TimeSpan(0, 0, 0, 0, 0);
+            foreach (var linspacePoint in linspaceList) // this point must be filled by one from each cycle
+            {
+                foreach (var cycle in signal.cycleList) // start with one cycle
+                {
+                    foreach (var sample in cycle.samples) // find the sample to add
+                    {
+                        if (sample.cycleDelta.CompareTo(linspacePoint.timePoint) >= 0) // if time has been reached
+                        {
+                            linspacePoint.addToList(sample);
+                            linspacePoint.signalName = signal.name;
+                            break;
+                        }
+                    }
+                }
+                activeTime = activeTime.Add(new TimeSpan(0, 0, 0, 0, interval));
+            }
+
+            foreach (var linspacePoint in linspaceList)
+                linspacePoint.processStats();
+
+                return linspaceList;
+        }
+
+
+
+
         // trim signal length to given time
         public signal trimEndTime(signal sig, TimeSpan cutAtTime)
         {
@@ -62,16 +117,10 @@ namespace sig
                     {
                         breakTimes.Add(samples[i].time);
                     }
-
-                }
-                    
+                }        
             }
-                
             return breakTimes;
         }
-
-
-
 
     }
 }
